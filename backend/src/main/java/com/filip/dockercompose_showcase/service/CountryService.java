@@ -1,13 +1,13 @@
 package com.filip.dockercompose_showcase.service;
 
-import com.filip.dockercompose_showcase.entity.Country;
+import com.filip.dockercompose_showcase.entity.CountryEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CountryService {
-    List<Country> findAll();
-    Optional<Country> findById(String countryId);
-    Country save(Country country);
+    List<CountryEntity> findAll();
+    Optional<CountryEntity> findById(String countryId);
+    CountryEntity save(CountryEntity countryEntity);
     void deleteById(String countryId);
 }

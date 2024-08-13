@@ -5,14 +5,13 @@ const api = axios.create({
     baseURL: 'http://localhost:8080/api',
 });
 
-export const getCountries = () => api.get('/countries');
-//export const getCountryById = (id: string) => axios.get<Country>(`/countries/${id}`);
+export const getCountries = () => api.get<Country[]>('/countries');
 export const getCountryById = async (id: any) => {
-    const {data} = await axios.get(`/countries/${id}`);
+    const {data} = await api.get<Country>(`/countries/${id}`);
     return data;
 };
-export const createCountry = (country: Country) => axios.post<Country>('/countries', country);
-export const updateCountry = (id: string, country: Country) => axios.put<Country>(`/countries/${id}`, country);
+export const createCountry = (country: Country) => api.post<Country>('/countries', country);
+export const updateCountry = (id: string, country: Country) => api.put<Country>(`/countries/${id}`, country);
 export const deleteCountry = (id: string) => api.delete(`/countries/${id}`);
 
 export interface Country {

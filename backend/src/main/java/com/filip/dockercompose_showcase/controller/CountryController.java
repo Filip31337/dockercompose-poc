@@ -1,6 +1,6 @@
 package com.filip.dockercompose_showcase.controller;
 
-import com.filip.dockercompose_showcase.entity.Country;
+import com.filip.dockercompose_showcase.entity.CountryEntity;
 import com.filip.dockercompose_showcase.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,28 +17,28 @@ public class CountryController {
     private CountryService countryService;
 
     @GetMapping
-    public List<Country> getAllCountries() {
+    public List<CountryEntity> getAllCountries() {
         return countryService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Country> getCountryById(@PathVariable String id) {
-        Optional<Country> country = countryService.findById(id);
+    public ResponseEntity<CountryEntity> getCountryById(@PathVariable String id) {
+        Optional<CountryEntity> country = countryService.findById(id);
         return country.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public Country createCountry(@RequestBody Country country) {
-        return countryService.save(country);
+    public CountryEntity createCountry(@RequestBody CountryEntity countryEntity) {
+        return countryService.save(countryEntity);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Country> updateCountry(@PathVariable String id, @RequestBody Country country) {
+    public ResponseEntity<CountryEntity> updateCountry(@PathVariable String id, @RequestBody CountryEntity countryEntity) {
         if (!countryService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        country.setCountryId(id);
-        return ResponseEntity.ok(countryService.save(country));
+        countryEntity.setCountryId(id);
+        return ResponseEntity.ok(countryService.save(countryEntity));
     }
 
     @DeleteMapping("/{id}")

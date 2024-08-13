@@ -13,8 +13,12 @@ const CountryEdit: React.FC = () => {
     const { register, handleSubmit, setValue } = useForm<FormData>();
 
     const { data, error, isLoading } = useQuery<Country, Error>({
-        queryKey: ['country', id],
-        queryFn: () => getCountryById(id),
+        queryKey: ['countryEntity', id],
+        queryFn: async () => {
+            const result = await getCountryById(id);
+            console.log('API Response:', result);
+            return result;
+        },
         enabled: !!id,
     });
 
@@ -27,7 +31,7 @@ const CountryEdit: React.FC = () => {
     }, [data, setValue]);
 
     const updateMutation = useMutation({
-        mutationFn: (country: Country) => updateCountry(id as string, country),
+        mutationFn: (countryEntity: Country) => updateCountry(id as string, countryEntity),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['countries'] });
             navigate('/countries');

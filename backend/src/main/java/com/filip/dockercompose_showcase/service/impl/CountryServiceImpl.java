@@ -1,6 +1,6 @@
 package com.filip.dockercompose_showcase.service.impl;
 
-import com.filip.dockercompose_showcase.entity.Country;
+import com.filip.dockercompose_showcase.entity.CountryEntity;
 import com.filip.dockercompose_showcase.repository.CountryRepository;
 import com.filip.dockercompose_showcase.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,18 @@ public class CountryServiceImpl implements CountryService {
     private CountryRepository countryRepository;
 
     @Override
-    public List<Country> findAll() {
+    public List<CountryEntity> findAll() {
         return countryRepository.findAll();
     }
 
     @Override
-    public Optional<Country> findById(String countryId) {
+    public Optional<CountryEntity> findById(String countryId) {
         return countryRepository.findById(countryId);
     }
 
     @Override
-    public Country save(Country country) {
-        return countryRepository.save(country);
+    public CountryEntity save(CountryEntity countryEntity) {
+        return countryRepository.save(countryEntity);
     }
 
     @Override

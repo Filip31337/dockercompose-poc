@@ -4,17 +4,11 @@ import { getCountries, deleteCountry, Country } from '../api';
 
 const CountryList = () => {
     const queryClient = useQueryClient();
-    /*const { data, error, isLoading } = useQuery(['countries'], () => getCountries().then(res => res.data));*/
     const { data, error, isLoading } = useQuery<Country[], Error>({
         queryKey: ['countries'],
         queryFn: () => getCountries().then(res => res.data),
     });
 
-    /*const deleteMutation = useMutation(deleteCountry, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(['countries']);
-        },
-    });*/
     const deleteMutation = useMutation({
         mutationFn: (id: string) => deleteCountry(id),
         onSuccess: () => {

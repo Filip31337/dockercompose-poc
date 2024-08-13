@@ -3,14 +3,12 @@ package com.filip.dockercompose_showcase.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "countries")
-public class Country {
-    @Id
-    @Column(name = "country_id", length = 3, nullable = false)
-    private String countryId;
+@Table(name = "cities")
+public class CityEntity {
 
-    @Column(name = "country_code", length = 2, nullable = false)
-    private String countryCode;
+    @Id
+    @Column(name = "city_id", length = 7, nullable = false)
+    private String cityId;
 
     @Column(name = "name", length = 100, nullable = false)
     private String name;
@@ -21,8 +19,8 @@ public class Country {
     @Column(name = "population")
     private Long population;
 
-    @Column(name = "area_sq_km")
-    private Double areaSqKm;
+    @Column(name = "is_capital", length = 1, nullable = false)
+    private char isCapital = 'N';
 
     @Column(name = "latitude")
     private Double latitude;
@@ -33,23 +31,16 @@ public class Country {
     @Column(name = "timezone", length = 40)
     private String timezone;
 
-    @Column(name = "region_id", length = 2, nullable = false)
-    private String regionId;
+    @ManyToOne
+    @JoinColumn(name = "country_id", nullable = false)
+    private CountryEntity countryEntity;
 
-    public String getCountryId() {
-        return countryId;
+    public String getCityId() {
+        return cityId;
     }
 
-    public void setCountryId(String countryId) {
-        this.countryId = countryId;
-    }
-
-    public String getCountryCode() {
-        return countryCode;
-    }
-
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 
     public String getName() {
@@ -76,12 +67,12 @@ public class Country {
         this.population = population;
     }
 
-    public Double getAreaSqKm() {
-        return areaSqKm;
+    public char getIsCapital() {
+        return isCapital;
     }
 
-    public void setAreaSqKm(Double areaSqKm) {
-        this.areaSqKm = areaSqKm;
+    public void setIsCapital(char isCapital) {
+        this.isCapital = isCapital;
     }
 
     public Double getLatitude() {
@@ -108,11 +99,11 @@ public class Country {
         this.timezone = timezone;
     }
 
-    public String getRegionId() {
-        return regionId;
+    public CountryEntity getCountry() {
+        return countryEntity;
     }
 
-    public void setRegionId(String regionId) {
-        this.regionId = regionId;
+    public void setCountry(CountryEntity countryEntity) {
+        this.countryEntity = countryEntity;
     }
 }
