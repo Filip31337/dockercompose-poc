@@ -6,7 +6,7 @@ const api = axios.create({
 });
 
 export const getCountries = () => api.get<Country[]>('/countries');
-export const getCountryById = async (id: any) => {
+export const getCountryById = async (id: never) => {
     const {data} = await api.get<Country>(`/countries/${id}`);
     return data;
 };
