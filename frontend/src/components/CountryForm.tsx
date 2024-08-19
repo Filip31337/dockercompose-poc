@@ -1,69 +1,80 @@
-import React, {useEffect} from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getCountryById, updateCountry, Country } from '../api';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import React, { useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
+import Field from './Field';
+import { createCountry, updateCountry, getCountryById, Country } from '../api';
+import { useParams, useNavigate } from 'react-router-dom';
+import { CountryFormData, countrySchema } from '../types/schemas';
 
-type FormData = Omit<Country, 'countryId'>;
+const CountryForm: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const isEditing = !!id;
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-const CountryEdit: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
-    const navigate = useNavigate();
-    const queryClient = useQueryClient();
-    const { register, handleSubmit, setValue } = useForm<FormData>();
+  const { data: country, error, isLoading } = useQuery<Country, Error>({
+    queryKey: ['country', id],
+    queryFn: () => getCountryById(id!).then(res => res.data),
+    enabled: isEditing,
+  });
 
-    const { data, error, isLoading } = useQuery<Country, Error>({
-        queryKey: ['countryEntity', id],
-        queryFn: async () => {
-            const result = await getCountryById(id);
-            console.log('API Response:', result);
-            return result;
-        },
-        enabled: !!id,
-    });
+  const methods = useForm<CountryFormData>({
+    resolver: zodResolver(countrySchema),
+    defaultValues: {
+      name: '',
+      countryCode: '',
+      population: undefined,
+      officialName: undefined,
+      areaSqKm: undefined,
+      latitude: undefined,
+      longitude: undefined,
+      timezone: undefined,
+      regionId: '',
+    },
+  });
 
-    useEffect(() => {
-        if (data) {
-            Object.keys(data).forEach((key) => {
-                setValue(key as keyof FormData, data[key as keyof Country]);
-            });
-        }
-    }, [data, setValue]);
+  useEffect(() => {
+    if (country) {
+      methods.reset(country);
+    }
+  }, [country, methods]);
 
-    const updateMutation = useMutation({
-        mutationFn: (countryEntity: Country) => updateCountry(id as string, countryEntity),
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['countries'] });
-            navigate('/countries');
-        },
-    });
+  const mutation = useMutation<Country, Error, CountryFormData>({
+    mutationFn: async (data: CountryFormData) => {
+      if (isEditing) {
+        const response = await updateCountry(id!, data);
+        return response.data;
+      } else {
+        const response = await createCountry(data);
+        return response.data;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['countries'] });
+      navigate('/countries');
+    },
+  });
 
-    const onSubmit: SubmitHandler<FormData> = (formData) => {
-        if (id) {
-            updateMutation.mutate({ ...formData, countryId: id });
-        }
-    };
+  const onSubmit = (data: CountryFormData) => {
+    mutation.mutate(data);
+  };
 
-    if (isLoading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <div>Error: {error.message}</div>;
 
-    return (
-        <div>
-            <h1>Edit Country</h1>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <input {...register('countryCode' as keyof FormData)} placeholder="Country Code" />
-                <input {...register('name' as keyof FormData)} placeholder="Name" />
-                <input {...register('officialName' as keyof FormData)} placeholder="Official Name" />
-                <input {...register('population' as keyof FormData)} placeholder="Population" />
-                <input {...register('areaSqKm' as keyof FormData)} placeholder="Area (sq km)" />
-                <input {...register('latitude' as keyof FormData)} placeholder="Latitude" />
-                <input {...register('longitude' as keyof FormData)} placeholder="Longitude" />
-                <input {...register('timezone' as keyof FormData)} placeholder="Timezone" />
-                <input {...register('regionId' as keyof FormData)} placeholder="Region ID" />
-                <button type="submit">Update Country</button>
-            </form>
-        </div>
-    );
+  return (
+    <FormProvider {...methods}>
+      <form onSubmit={methods.handleSubmit(onSubmit)}>
+        <Field name="name" label="Name" />
+        <Field name="countryCode" label="Country Code" />
+        <Field name="population" label="Population" type="number" />
+        <Field name="officialName" label="Official Name" />
+        <Field name="regionId" label="Region ID" />
+        <button type="submit">{isEditing ? 'Update' : 'Create New'} Country</button>
+      </form>
+    </FormProvider>
+  );
 };
 
-export default CountryEdit;
+export default CountryForm;

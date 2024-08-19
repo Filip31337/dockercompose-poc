@@ -1,6 +1,8 @@
 package com.filip.dockercompose_showcase.service.impl;
 
+import com.filip.dockercompose_showcase.dto.RegionDTO;
 import com.filip.dockercompose_showcase.entity.RegionEntity;
+import com.filip.dockercompose_showcase.mapper.RegionMapper;
 import com.filip.dockercompose_showcase.repository.RegionRepository;
 import com.filip.dockercompose_showcase.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class RegionServiceImpl implements RegionService {
@@ -20,26 +23,36 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public List<RegionEntity> findAll() {
-        return regionRepository.findAll();
+    public List<RegionDTO> findAll() {
+        return regionRepository.findAll()
+                .stream()
+                .map(RegionMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<RegionEntity> findById(String regionId) {
-        return regionRepository.findById(regionId);
+    public Optional<RegionDTO> findById(String regionId) {
+
+        return regionRepository.findById(regionId)
+                .map(RegionMapper::toDTO);
     }
 
     @Override
-    public RegionEntity save(RegionEntity region) {
-        return regionRepository.save(region);
+    public RegionDTO save(RegionDTO regionDTO) {
+        RegionEntity regionEntity = RegionMapper.toEntity(regionDTO);
+        RegionEntity savedRegion = regionRepository.save(regionEntity);
+
+        return RegionMapper.toDTO(savedRegion);
     }
 
     @Override
-    public RegionEntity update(String regionId, RegionEntity region) {
+    public RegionDTO update(String regionId, RegionDTO regionDTO) {
         return regionRepository.findById(regionId)
                 .map(existingRegion -> {
-                    existingRegion.setName(region.getName());
-                    return regionRepository.save(existingRegion);
+                    RegionEntity updatedRegion = RegionMapper.toEntity(regionDTO);
+                    updatedRegion.setRegionId(existingRegion.getRegionId());
+                    RegionEntity savedRegion = regionRepository.save(updatedRegion);
+                    return RegionMapper.toDTO(savedRegion);
                 })
                 .orElseThrow(() -> new RuntimeException("Region not found with id " + regionId));
     }

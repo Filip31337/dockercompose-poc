@@ -25,7 +25,7 @@ const CountryList = () => {
             <Link to="/countries/new">Add New Country</Link>
             <ul>
                 {data && data.length > 0 ? (
-                    data.map((country) => (
+                    data.map((country: Country) => (
                         <li key={country.countryId}>
                             {country.name}
                             <button onClick={() => deleteMutation.mutate(country.countryId)}>Delete</button>

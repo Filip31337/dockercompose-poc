@@ -1,5 +1,6 @@
 package com.filip.dockercompose_showcase.controller;
 
+import com.filip.dockercompose_showcase.dto.CurrencyDTO;
 import com.filip.dockercompose_showcase.entity.CurrencyEntity;
 import com.filip.dockercompose_showcase.service.CurrencyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +21,25 @@ public class CurrencyController {
     }
 
     @GetMapping
-    public List<CurrencyEntity> getAllCurrencies() {
+    public List<CurrencyDTO> getAllCurrencies() {
         return currencyService.findAll();
     }
 
     @GetMapping("/{currencyId}")
-    public ResponseEntity<CurrencyEntity> getCurrencyById(@PathVariable String currencyId) {
+    public ResponseEntity<CurrencyDTO> getCurrencyById(@PathVariable String currencyId) {
         return currencyService.findById(currencyId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public CurrencyEntity createCurrency(@RequestBody CurrencyEntity currency) {
-        return currencyService.save(currency);
+    public CurrencyDTO createCurrency(@RequestBody CurrencyDTO currencyDTO) {
+        return currencyService.save(currencyDTO);
     }
 
     @PutMapping("/{currencyId}")
-    public ResponseEntity<CurrencyEntity> updateCurrency(@PathVariable String currencyId, @RequestBody CurrencyEntity currency) {
-        return ResponseEntity.ok(currencyService.update(currencyId, currency));
+    public ResponseEntity<CurrencyDTO> updateCurrency(@PathVariable String currencyId, @RequestBody CurrencyDTO currencyDTO) {
+        return ResponseEntity.ok(currencyService.update(currencyId, currencyDTO));
     }
 
     @DeleteMapping("/{currencyId}")

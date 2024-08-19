@@ -1,5 +1,6 @@
 package com.filip.dockercompose_showcase.controller;
 
+import com.filip.dockercompose_showcase.dto.CityDTO;
 import com.filip.dockercompose_showcase.entity.CityEntity;
 import com.filip.dockercompose_showcase.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,24 +21,24 @@ public class CityController {
     }
 
     @GetMapping
-    public List<CityEntity> getAllCities() {
+    public List<CityDTO> getAllCities() {
         return cityService.findAll();
     }
 
     @GetMapping("/{cityId}")
-    public ResponseEntity<CityEntity> getCityById(@PathVariable String cityId) {
+    public ResponseEntity<CityDTO> getCityById(@PathVariable String cityId) {
         return cityService.findById(cityId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public CityEntity createCity(@RequestBody CityEntity city) {
+    public CityDTO createCity(@RequestBody CityDTO city) {
         return cityService.save(city);
     }
 
     @PutMapping("/{cityId}")
-    public ResponseEntity<CityEntity> updateCity(@PathVariable String cityId, @RequestBody CityEntity city) {
+    public ResponseEntity<CityDTO> updateCity(@PathVariable String cityId, @RequestBody CityDTO city) {
         return ResponseEntity.ok(cityService.update(cityId, city));
     }
 

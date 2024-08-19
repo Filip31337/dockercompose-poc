@@ -1,5 +1,6 @@
 package com.filip.dockercompose_showcase.controller;
 
+import com.filip.dockercompose_showcase.dto.RegionDTO;
 import com.filip.dockercompose_showcase.entity.RegionEntity;
 import com.filip.dockercompose_showcase.service.RegionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,25 +21,25 @@ public class RegionController {
     }
 
     @GetMapping
-    public List<RegionEntity> getAllRegions() {
+    public List<RegionDTO> getAllRegions() {
         return regionService.findAll();
     }
 
     @GetMapping("/{regionId}")
-    public ResponseEntity<RegionEntity> getRegionById(@PathVariable String regionId) {
+    public ResponseEntity<RegionDTO> getRegionById(@PathVariable String regionId) {
         return regionService.findById(regionId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public RegionEntity createRegion(@RequestBody RegionEntity region) {
-        return regionService.save(region);
+    public RegionDTO createRegion(@RequestBody RegionDTO regionDTO) {
+        return regionService.save(regionDTO);
     }
 
     @PutMapping("/{regionId}")
-    public ResponseEntity<RegionEntity> updateRegion(@PathVariable String regionId, @RequestBody RegionEntity region) {
-        return ResponseEntity.ok(regionService.update(regionId, region));
+    public ResponseEntity<RegionDTO> updateRegion(@PathVariable String regionId, @RequestBody RegionDTO regionDTO) {
+        return ResponseEntity.ok(regionService.update(regionId, regionDTO));
     }
 
     @DeleteMapping("/{regionId}")

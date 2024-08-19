@@ -1,6 +1,8 @@
 package com.filip.dockercompose_showcase.service.impl;
 
+import com.filip.dockercompose_showcase.dto.CityDTO;
 import com.filip.dockercompose_showcase.entity.CityEntity;
+import com.filip.dockercompose_showcase.mapper.CityMapper;
 import com.filip.dockercompose_showcase.repository.CityRepository;
 import com.filip.dockercompose_showcase.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class CityServiceImpl implements CityService {
@@ -20,33 +23,34 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<CityEntity> findAll() {
-        return cityRepository.findAll();
+    public List<CityDTO> findAll() {
+        return cityRepository.findAll()
+                .stream()
+                .map(CityMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Optional<CityEntity> findById(String cityId) {
-        return cityRepository.findById(cityId);
+    public Optional<CityDTO> findById(String cityId) {
+        return cityRepository.findById(cityId)
+                .map(CityMapper::toDTO);
     }
 
     @Override
-    public CityEntity save(CityEntity city) {
-        return cityRepository.save(city);
+    public CityDTO save(CityDTO cityDTO) {
+        CityEntity cityEntity = CityMapper.toEntity(cityDTO);
+        CityEntity savedCity = cityRepository.save(cityEntity);
+        return CityMapper.toDTO(savedCity);
     }
 
     @Override
-    public CityEntity update(String cityId, CityEntity city) {
+    public CityDTO update(String cityId, CityDTO cityDTO) {
         return cityRepository.findById(cityId)
                 .map(existingCity -> {
-                    existingCity.setName(city.getName());
-                    existingCity.setOfficialName(city.getOfficialName());
-                    existingCity.setPopulation(city.getPopulation());
-                    existingCity.setIsCapital(city.getIsCapital());
-                    existingCity.setLatitude(city.getLatitude());
-                    existingCity.setLongitude(city.getLongitude());
-                    existingCity.setTimezone(city.getTimezone());
-                    existingCity.setCountry(city.getCountry());
-                    return cityRepository.save(existingCity);
+                    CityEntity updatedCity = CityMapper.toEntity(cityDTO);
+                    updatedCity.setCityId(existingCity.getCityId());
+                    CityEntity savedCity = cityRepository.save(updatedCity);
+                    return CityMapper.toDTO(savedCity);
                 })
                 .orElseThrow(() -> new RuntimeException("City not found with id " + cityId));
     }
@@ -56,3 +60,4 @@ public class CityServiceImpl implements CityService {
         cityRepository.deleteById(cityId);
     }
 }
+
