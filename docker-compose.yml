@@ -23,14 +23,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:oracle:thin:@oracle-db:1521/FREEPDB1
       SPRING_DATASOURCE_USERNAME: test
       SPRING_DATASOURCE_PASSWORD: test
+    volumes:
+      - ./keystore.p12:/app/keystore.p12
     ports:
-      - "8080:8080"
+      - "8443:8443"
 
   react-app:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        REACT_APP_API_URL: http://localhost:8080/hello
+        REACT_APP_API_URL: https://localhost:8443/api
     ports:
       - "3000:80"

@@ -1,9 +1,12 @@
 import axios from 'axios';
-import { CityFormData, CountryFormData, CurrencyFormData, RegionFormData } from './types/schemas'
+import { CityFormData, CountryFormData, CurrencyFormData, RegionFormData } from './types/schemas';
+
+const isDevelopment = process.env.NODE_ENV === 'development';
 
 const api = axios.create({
-    //baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080/api',
-    baseURL: 'http://localhost:8080/api',
+    baseURL: isDevelopment
+      ? 'https://localhost:8443/api'  // Localhost URL during development
+      : process.env.REACT_APP_API_URL || 'https://localhost:8443/api', // Use env variable or fallback in production
 });
 
 // Countries API
