@@ -6,6 +6,10 @@ import Field from './Field';
 import { createRegion, updateRegion, getRegionById, Region } from '../api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { RegionFormData, regionSchema } from '../types/schemas';
+import { Spinner } from '@/components/ui/spinner'
+import { Alert } from '@/components/ui/alert'
+import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 
 const RegionForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,16 +56,20 @@ const RegionForm: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <Spinner />;
+  if (error) return <Alert variant="destructive">{error.message}</Alert>;
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
-        <Field name="name" label="Name" />
-        <button type="submit">{isEditing ? 'Update' : 'Create New'} Region</button>
-      </form>
-    </FormProvider>
+    <Card className="max-w-md mx-auto p-4">
+      <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
+          <Field name="name" label="Name" />
+          <Button type="submit" variant="default" className="w-full">
+            {isEditing ? 'Update' : 'Create New'} Region
+          </Button>
+        </form>
+      </FormProvider>
+    </Card>
   );
 };
 

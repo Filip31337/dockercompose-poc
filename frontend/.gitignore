@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Ignores compiled TypeScript files
+**/wwwroot/app/**/*.map
+**/wwwroot/app/**/*.js
+
+*.d.ts
+*.js
+/frontend.iml
+/res.data)
+/{
+/()

@@ -2,10 +2,13 @@ import React, { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
-import Field from './Field';
 import { createCountry, updateCountry, getCountryById, Country } from '../api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { CountryFormData, countrySchema } from '../types/schemas';
+import Field from '@/components/Field'
+import { Button } from '@/components/ui/button'
+import { Alert } from '@/components/ui/alert'
+import { Spinner } from '@/components/ui/spinner'
 
 const CountryForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -60,18 +63,18 @@ const CountryForm: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isLoading) return <p>Loading...</p>;
-  if (error) return <div>Error: {error.message}</div>;
+  if (isLoading) return <Spinner className="m-auto" />;
+  if (error) return <Alert variant="default">{error.message}</Alert>;
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4 p-6 bg-white rounded shadow-md max-w-lg mx-auto">
         <Field name="name" label="Name" />
         <Field name="countryCode" label="Country Code" />
         <Field name="population" label="Population" type="number" />
         <Field name="officialName" label="Official Name" />
         <Field name="regionId" label="Region ID" />
-        <button type="submit">{isEditing ? 'Update' : 'Create New'} Country</button>
+        <Button type="submit" className="w-full">{isEditing ? 'Update' : 'Create New'} Country</Button>
       </form>
     </FormProvider>
   );
