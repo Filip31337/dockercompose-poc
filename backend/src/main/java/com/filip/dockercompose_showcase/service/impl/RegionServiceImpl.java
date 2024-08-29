@@ -1,6 +1,7 @@
 package com.filip.dockercompose_showcase.service.impl;
 
 import com.filip.dockercompose_showcase.dto.RegionDTO;
+import com.filip.dockercompose_showcase.entity.CountryEntity;
 import com.filip.dockercompose_showcase.entity.RegionEntity;
 import com.filip.dockercompose_showcase.mapper.RegionMapper;
 import com.filip.dockercompose_showcase.repository.RegionRepository;
@@ -40,6 +41,9 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public RegionDTO save(RegionDTO regionDTO) {
         RegionEntity regionEntity = RegionMapper.toEntity(regionDTO);
+        for (CountryEntity country : regionEntity.getCountries()) {
+            country.setRegionEntity(regionEntity);
+        }
         RegionEntity savedRegion = regionRepository.save(regionEntity);
 
         return RegionMapper.toDTO(savedRegion);
@@ -51,6 +55,9 @@ public class RegionServiceImpl implements RegionService {
                 .map(existingRegion -> {
                     RegionEntity updatedRegion = RegionMapper.toEntity(regionDTO);
                     updatedRegion.setRegionId(existingRegion.getRegionId());
+                    for (CountryEntity country : updatedRegion.getCountries()) {
+                        country.setRegionEntity(updatedRegion);
+                    }
                     RegionEntity savedRegion = regionRepository.save(updatedRegion);
                     return RegionMapper.toDTO(savedRegion);
                 })

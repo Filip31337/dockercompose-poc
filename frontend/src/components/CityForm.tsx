@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, FormProvider, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import Field from './Field';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Alert } from '@/components/ui/alert'
 import { Spinner } from '@/components/ui/spinner'
 import { Card } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 
 const CityForm: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,9 +27,11 @@ const CityForm: React.FC = () => {
   const methods = useForm<CityFormData>({
     resolver: zodResolver(citySchema),
     defaultValues: {
+      cityId: '',
       name: '',
       population: 0,
       countryId: '',
+      isCapital: false,
     },
   });
 
@@ -65,9 +68,26 @@ const CityForm: React.FC = () => {
     <Card className="max-w-md mx-auto p-4">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
+          {!isEditing && <Field name="cityId" label="City ID" />}
           <Field name="name" label="Name" />
           <Field name="population" label="Population" type="number" />
           <Field name="countryId" label="Country ID" />
+          <Controller
+            name="isCapital"
+            control={methods.control as never}
+            render={({ field }) => (
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="isCapital"
+                  checked={field.value || false}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
+                />
+                <label htmlFor="isCapital" className="text-sm font-medium text-gray-900">
+                  Capital
+                </label>
+              </div>
+            )}
+          />
           <Button type="submit" variant="default" className="w-full">
             {isEditing ? 'Update' : 'Create New'} City
           </Button>

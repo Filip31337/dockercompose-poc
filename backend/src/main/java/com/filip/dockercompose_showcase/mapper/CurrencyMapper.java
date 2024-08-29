@@ -18,6 +18,7 @@ public class CurrencyMapper {
         currencyEntity.setName(currencyDTO.getName());
         currencyEntity.setOfficialName(currencyDTO.getOfficialName());
         currencyEntity.setSymbol(currencyDTO.getSymbol());
+        currencyEntity.setCurrencyId(currencyDTO.getCurrencyId());
         return currencyEntity;
     }
 }

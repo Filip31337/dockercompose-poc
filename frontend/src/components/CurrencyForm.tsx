@@ -26,6 +26,7 @@ const CurrencyForm: React.FC = () => {
   const methods = useForm<CurrencyFormData>({
     resolver: zodResolver(currencySchema),
     defaultValues: {
+      currencyId: '',
       name: '',
       officialName: '',
       symbol: '',
@@ -65,7 +66,8 @@ const CurrencyForm: React.FC = () => {
     <Card className="max-w-md mx-auto p-4">
       <FormProvider {...methods}>
         <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
-          <Field name="name" label="Name" />
+          {!isEditing && <Field name="name" label="Name" />}
+          <Field name="currencyId" label="Currency ID" />
           <Field name="officialName" label="Official Name" />
           <Field name="symbol" label="Symbol" />
           <Button type="submit" variant="default" className="w-full">

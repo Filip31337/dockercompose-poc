@@ -91,4 +91,20 @@ public class CountryDTO {
     public void setRegionId(String regionId) {
         this.regionId = regionId;
     }
+
+    @Override
+    public String toString() {
+        return "CountryDTO{" +
+                "countryId='" + countryId + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                ", name='" + name + '\'' +
+                ", officialName='" + officialName + '\'' +
+                ", population=" + population +
+                ", areaSqKm=" + areaSqKm +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", timezone='" + timezone + '\'' +
+                ", regionId='" + regionId + '\'' +
+                '}';
+    }
 }

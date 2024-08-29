@@ -39,6 +39,7 @@ export const deleteRegion = (id: string) => api.delete(`/regions/${id}`);
 export interface Region {
     regionId: string;
     name: string;
+    countries?: CountryFormData[];
 }
 
 // Currencies API

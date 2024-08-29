@@ -3,12 +3,14 @@ package com.filip.dockercompose_showcase.controller;
 import com.filip.dockercompose_showcase.dto.CityDTO;
 import com.filip.dockercompose_showcase.entity.CityEntity;
 import com.filip.dockercompose_showcase.service.CityService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/cities")
 public class CityController {
@@ -38,8 +40,9 @@ public class CityController {
     }
 
     @PutMapping("/{cityId}")
-    public ResponseEntity<CityDTO> updateCity(@PathVariable String cityId, @RequestBody CityDTO city) {
-        return ResponseEntity.ok(cityService.update(cityId, city));
+    public ResponseEntity<CityDTO> updateCity(@PathVariable String cityId, @RequestBody CityDTO cityDTO) {
+        log.debug("UpdateCity received body: " + cityDTO);
+        return ResponseEntity.ok(cityService.update(cityId, cityDTO));
     }
 
     @DeleteMapping("/{cityId}")

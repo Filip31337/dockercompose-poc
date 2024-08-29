@@ -25,6 +25,7 @@ const CountryForm: React.FC = () => {
   const methods = useForm<CountryFormData>({
     resolver: zodResolver(countrySchema),
     defaultValues: {
+      countryId: '',
       name: '',
       countryCode: '',
       population: undefined,
@@ -69,6 +70,7 @@ const CountryForm: React.FC = () => {
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4 p-6 bg-white rounded shadow-md max-w-lg mx-auto">
+        {!isEditing && <Field name="countryId" label="Country ID" />}
         <Field name="name" label="Name" />
         <Field name="countryCode" label="Country Code" />
         <Field name="population" label="Population" type="number" />

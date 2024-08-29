@@ -2,6 +2,7 @@ package com.filip.dockercompose_showcase.mapper;
 
 import com.filip.dockercompose_showcase.dto.CountryDTO;
 import com.filip.dockercompose_showcase.entity.CountryEntity;
+import com.filip.dockercompose_showcase.entity.RegionEntity;
 import org.springframework.stereotype.Component;
 
 public class CountryMapper {
@@ -20,7 +21,7 @@ public class CountryMapper {
         return dto;
     }
 
-    public static CountryEntity toEntity(CountryDTO countryDTO) {
+    public static CountryEntity toEntity(CountryDTO countryDTO, RegionEntity regionEntity) {
         CountryEntity countryEntity = new CountryEntity();
         countryEntity.setCountryId(countryDTO.getCountryId());
         countryEntity.setCountryCode(countryDTO.getCountryCode());
@@ -31,6 +32,7 @@ public class CountryMapper {
         countryEntity.setOfficialName(countryDTO.getOfficialName());
         countryEntity.setTimezone(countryDTO.getTimezone());
         countryEntity.setPopulation(countryDTO.getPopulation());
+        countryEntity.setRegionEntity(regionEntity);
         return countryEntity;
     }
 }

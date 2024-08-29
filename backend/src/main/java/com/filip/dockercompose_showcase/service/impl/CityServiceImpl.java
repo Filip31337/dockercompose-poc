@@ -2,9 +2,12 @@ package com.filip.dockercompose_showcase.service.impl;
 
 import com.filip.dockercompose_showcase.dto.CityDTO;
 import com.filip.dockercompose_showcase.entity.CityEntity;
+import com.filip.dockercompose_showcase.entity.CountryEntity;
 import com.filip.dockercompose_showcase.mapper.CityMapper;
 import com.filip.dockercompose_showcase.repository.CityRepository;
+import com.filip.dockercompose_showcase.repository.CountryRepository;
 import com.filip.dockercompose_showcase.service.CityService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +20,12 @@ public class CityServiceImpl implements CityService {
 
     private final CityRepository cityRepository;
 
+    private final CountryRepository countryRepository;
+
     @Autowired
-    public CityServiceImpl(CityRepository cityRepository) {
+    public CityServiceImpl(CityRepository cityRepository, CountryRepository countryRepository) {
         this.cityRepository = cityRepository;
+        this.countryRepository = countryRepository;
     }
 
     @Override
@@ -38,7 +44,9 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public CityDTO save(CityDTO cityDTO) {
-        CityEntity cityEntity = CityMapper.toEntity(cityDTO);
+        CountryEntity countryEntity = countryRepository.findById(cityDTO.getCountryId())
+                .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        CityEntity cityEntity = CityMapper.toEntity(cityDTO, countryEntity);
         CityEntity savedCity = cityRepository.save(cityEntity);
         return CityMapper.toDTO(savedCity);
     }
@@ -47,7 +55,9 @@ public class CityServiceImpl implements CityService {
     public CityDTO update(String cityId, CityDTO cityDTO) {
         return cityRepository.findById(cityId)
                 .map(existingCity -> {
-                    CityEntity updatedCity = CityMapper.toEntity(cityDTO);
+                    CountryEntity countryEntity = countryRepository.findById(cityDTO.getCountryId())
+                            .orElseThrow(() -> new EntityNotFoundException("Country not found"));
+                    CityEntity updatedCity = CityMapper.toEntity(cityDTO, countryEntity);
                     updatedCity.setCityId(existingCity.getCityId());
                     CityEntity savedCity = cityRepository.save(updatedCity);
                     return CityMapper.toDTO(savedCity);

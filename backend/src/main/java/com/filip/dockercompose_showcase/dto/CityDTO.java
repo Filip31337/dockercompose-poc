@@ -31,11 +31,11 @@ public class CityDTO {
         this.population = population;
     }
 
-    public Boolean getCapital() {
+    public Boolean getIsCapital() {
         return isCapital;
     }
 
-    public void setCapital(Boolean capital) {
+    public void setIsCapital(Boolean capital) {
         isCapital = capital;
     }
 
@@ -45,5 +45,16 @@ public class CityDTO {
 
     public void setCountryId(String countryId) {
         this.countryId = countryId;
+    }
+
+    @Override
+    public String toString() {
+        return "CityDTO{" +
+                "cityId='" + cityId + '\'' +
+                ", name='" + name + '\'' +
+                ", population=" + population +
+                ", isCapital=" + isCapital +
+                ", countryId='" + countryId + '\'' +
+                '}';
     }
 }

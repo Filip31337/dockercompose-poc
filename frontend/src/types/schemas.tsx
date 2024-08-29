@@ -1,13 +1,5 @@
 import { z } from "zod";
 
-// Schema for Region
-export const regionSchema = z.object({
-  regionId: z.string().min(1, "Region ID is required"),
-  name: z.string().min(1, "Name is required"),
-});
-
-export type RegionFormData = z.infer<typeof regionSchema>;
-
 // Schema for Currency
 export const currencySchema = z.object({
   currencyId: z.string().min(1, "Currency ID is required"),
@@ -23,7 +15,7 @@ export const citySchema = z.object({
   cityId: z.string().min(1, "City ID is required"),
   name: z.string().min(1, "Name is required"),
   officialName: z.string().optional(),
-  population: z.number().optional(),
+  population: z.coerce.number().optional(),
   isCapital: z.boolean().optional(),
   latitude: z.number().optional(),
   longitude: z.number().optional(),
@@ -39,12 +31,21 @@ export const countrySchema = z.object({
   countryCode: z.string().min(1, "Country Code is required"),
   name: z.string().min(1, "Name is required"),
   officialName: z.string().optional(),
-  population: z.number().optional(),
-  areaSqKm: z.number().optional(),
-  latitude: z.number().optional(),
-  longitude: z.number().optional(),
+  population: z.coerce.number().optional(),
+  areaSqKm: z.coerce.number().optional(),
+  latitude: z.coerce.number().optional(),
+  longitude: z.coerce.number().optional(),
   timezone: z.string().optional(),
   regionId: z.string().min(1, "Region ID is required"),
 });
+
+// Schema for Region
+export const regionSchema = z.object({
+  regionId: z.string().min(1, "Region ID is required"),
+  name: z.string().min(1, "Name is required"),
+  countries: z.array(countrySchema).optional(),
+});
+
+export type RegionFormData = z.infer<typeof regionSchema>;
 
 export type CountryFormData = z.infer<typeof countrySchema>;
