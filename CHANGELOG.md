@@ -1,6 +1,10 @@
 # CHANGELOG
 
 ## [1.0.0] - 2024-08-01
+- Initial setup
+## [1.0.1] - 2024-11-18
+- Readme update
+- Add future improvements
 
 ## Preparing for the job
 
@@ -63,3 +67,4 @@
 - Implement CI/CD pipeline for automated testing and deployment.
 - Add more comprehensive test cases, including integration tests.
 - Explore scaling options using Docker Swarm or Kubernetes.
+- Add maven wrapper and node wrapper so only docker is required for run
