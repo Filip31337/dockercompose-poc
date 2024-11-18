@@ -95,24 +95,34 @@ docker-compose up
 ```
 #### This will:
 
-- Start the Oracle Database.
-- Deploy the Spring Boot application to Tomcat.
-- Serve the React application with Nginx web server.
+- Deploy and start the Oracle Database.
+- Deploy and start the Spring Boot application on Tomcat.
+- Deploy and start the React application on Nginx web server.
 
 ### 6. Access the application
 
-Access web application using browser on the following addresses:
-- Backend API: https://localhost:8443
-- Frontend: http://localhost:3000
-- Allow security warning for Self-Signed certificate.
+Allow security warning for Self-Signed certificate:
+- Open URL https://localhost:8443 in target browser and 
+allow security warning for Self-Signed certificate
 
-Optionally access BE API using curl or postman:
+Access web application using browser on the following addresses:
+- Frontend: http://localhost:3000
+
+### 7. Optional debugging
+
+#### Access backend API using curl or postman:
 
 Using Postman:
-- Complete step ```Access web application using browser```
+- Complete step 6 ```Access web application using browser```
 - Make sure to disable ```Enable SSL certificate verification```
 
 Using CURL: 
 ```bash 
-curl --location --request GET 'https://localhost:8443/api/regions'
+curl --insecure --location --request GET https://localhost:8443/api/regions
 ```
+
+#### Access database directly:
+- Open oracle-db container shell to run sqlplus CLI
+- Run `TEST/test@//localhost/FREEPDB1`
+- Run `select * from regions;`
+
