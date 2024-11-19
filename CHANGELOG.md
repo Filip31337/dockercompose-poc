@@ -3,8 +3,10 @@
 ## [1.0.0] - 2024-08-01
  - Initial setup
 ## [1.0.1] - 2024-11-18
- - Minor bugfixes after more testing
+ - Minor readme and changelog update after more testing
  - Add future improvements
+## [1.0.2] - 2024-11-19
+- Minor readme and changelog update after more testing
 
 ## Preparing for the job
 
@@ -68,3 +70,4 @@
 - Add more comprehensive test cases, including integration tests.
 - Explore scaling options using Docker Swarm or Kubernetes.
 - Add maven wrapper and node wrapper so only docker is required for run
+- Utilise Vite Dev server for faster development

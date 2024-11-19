@@ -64,6 +64,15 @@ cd ../frontend
 ```bash
 npm install
 ```
+- Tailwind & Postcss init
+```bash
+npx tailwindcss init -p
+```
+- Tailwind config, add following content in ./tailwind.config.js
+```bash
+content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
+```
+
 - Build the React application:
 ```bash
 npm run build
@@ -86,7 +95,7 @@ cd ../
 
 - Build Docker Compose:
 ```bash
-docker-compose --build
+docker-compose build --no-cache
 ```
 
 - Run Docker Compose:
@@ -125,4 +134,3 @@ curl --insecure --location --request GET https://localhost:8443/api/regions
 - Open oracle-db container shell to run sqlplus CLI
 - Run `TEST/test@//localhost/FREEPDB1`
 - Run `select * from regions;`
-
