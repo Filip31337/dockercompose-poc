@@ -64,6 +64,14 @@ cd ../frontend
 ```bash
 npm install
 ```
+- Tailwind & Postcss init
+```bash
+npx tailwindcss init -p
+```
+- Tailwind config, add following content in ./tailwind.config.js
+```bash
+content: ['./src/**/*.{html,js,ts,jsx,tsx}'],
+```
 - Build the React application:
 ```bash
 npm run build
@@ -88,7 +96,7 @@ cd ../
 
 - Build Docker Compose:
 ```bash
-docker-compose --build
+docker-compose build --no-cache
 ```
 
 - Run Docker Compose:

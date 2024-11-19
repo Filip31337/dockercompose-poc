@@ -5,6 +5,9 @@
 ## [1.0.1] - 2024-11-18
 - Readme update
 - Add future improvements
+## [1.0.1] - 2024-11-19
+- Readme update
+- Add future improvements
 
 ## Preparing for the job
 
@@ -68,3 +71,4 @@
 - Add more comprehensive test cases, including integration tests.
 - Explore scaling options using Docker Swarm or Kubernetes.
 - Add maven wrapper and node wrapper so only docker is required for run
+- Utilise Vite Dev server for faster development
