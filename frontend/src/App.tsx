@@ -1,5 +1,5 @@
 import {Routes, Route, Link } from 'react-router-dom';
-import CountryList from './pages/CountryList';
+import CountryList from './pages/CountryList/CountryList';
 import RegionsList from './pages/RegionsList'
 import RegionForm from './components/RegionForm'
 import CurrencyForm from './components/CurrencyForm'
