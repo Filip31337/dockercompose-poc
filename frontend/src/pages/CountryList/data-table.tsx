@@ -127,11 +127,11 @@ export function DataTable<TData, TValue>({
             )
             }
           </TableBody>
-          <div className="flex-1 text-sm text-muted-foreground p-2">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
         </Table>
+        <div className="flex-1 text-sm text-muted-foreground p-2">
+          {table.getFilteredSelectedRowModel().rows.length} of{" "}
+          {table.getFilteredRowModel().rows.length} row(s) selected.
+        </div>
       </div>
       <div className="flex items-center justify-end space-x-2 py-4">
         <Button

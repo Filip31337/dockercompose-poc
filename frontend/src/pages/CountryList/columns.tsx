@@ -10,8 +10,9 @@ import {
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { Checkbox } from '@/components/ui/checkbox'
+import { useNavigate } from "react-router-dom"
 
-export const columns: ColumnDef<Country>[] = [
+export const columns = (navigate: ReturnType<typeof useNavigate>, onDelete: (id: string) => void): ColumnDef<Country>[] => [
   {
     id: "select",
     header: ({ table }) => (
@@ -110,8 +111,14 @@ export const columns: ColumnDef<Country>[] = [
               Copy Country ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Edit Country</DropdownMenuItem>
-            <DropdownMenuItem>Delete Country</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigate('/countries/' + country.countryId + '/edit')}
+            >Edit Country
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => onDelete(country.countryId)}
+            >Delete Country
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
