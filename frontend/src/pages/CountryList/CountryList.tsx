@@ -8,8 +8,7 @@ import { columns } from '@/pages/CountryList/columns'
 const CountryList = () => {
   const { data, error, isLoading } = useQuery<Country[], Error>({
     queryKey: ['countries'],
-    queryFn: () => getCountries().then(res => res.data),
-    //queryFn: () => getCountries().then(), //dev mock
+    queryFn: () => getCountries().then(res => res.data as Country[]),
   });
 
   if (isLoading) return <Spinner size="large" />;

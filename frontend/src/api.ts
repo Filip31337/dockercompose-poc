@@ -18,7 +18,8 @@ export const deleteCountry = (id: string) => api.delete(`/countries/${id}`);
 
 // dev mock
 /*const MockCountries = {
-    promise: Promise.resolve([
+    promise: Promise.resolve({
+      data: [
         {
             countryId: "XKX",
             countryCode: "XK",
@@ -151,7 +152,8 @@ export const deleteCountry = (id: string) => api.delete(`/countries/${id}`);
             timezone: "Europe/Tirane",
             regionId: "EU",
         },
-    ]),
+    ]
+    }),
 };
 
 export const getCountries = () => {
