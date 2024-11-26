@@ -12,11 +12,25 @@ const api = axios.create({
 });
 
 // Countries API
-export const getCountries = () => isDevelopment ? mockedApi.getCountriesMock() : api.get<Country[]>('/countries');
+export const getCountriesAll = () => isDevelopment ? mockedApi.getCountriesAllMock() : api.get<PageResponse<Country>>('/countries/all')
+export const getPaginatedCountries = (page: number, pageSize: number) =>
+  isDevelopment
+    ? mockedApi.getCountriesAllMock()
+    : api.get<PageResponse<Country>>('/countries', {
+    params: { page, pageSize },
+}).then((res) => res);
 export const getCountryById = (id: string) => isDevelopment ? mockedApi.getCountryMock(id) : api.get<Country>(`/countries/${id}`);
 export const createCountry = (country: CountryFormData) => api.post('/countries', country);
 export const updateCountry = (id: string, country: CountryFormData) => api.put(`/countries/${id}`, country);
-export const deleteCountry = (id: string) => isDevelopment ? mockedApi.deleteCountryMock(id) : api.delete(`/countries/${id}`);
+export const deleteCountry = (id: string) => api.delete(`/countries/${id}`);
+
+export interface PageResponse<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    number: number;
+}
 
 export interface Country {
     countryId: string;

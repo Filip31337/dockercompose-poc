@@ -4,7 +4,7 @@ import {
   ColumnDef, ColumnFiltersState,
   flexRender,
   getCoreRowModel, getFilteredRowModel,
-  getPaginationRowModel, getSortedRowModel,
+  getSortedRowModel,
   SortingState,
   useReactTable, VisibilityState,
 } from '@tanstack/react-table'
@@ -18,11 +18,21 @@ import { DropdownMenuCheckboxItem, DropdownMenuContent } from '@/components/ui/d
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  total: number;
+  page: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (pageSize: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  total,
+  page,
+  pageSize,
+  onPageChange,
+  onPageSizeChange,
   }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -31,8 +41,20 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    rowCount: total,
+    pageCount: Math.ceil(total / pageSize),
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    //getPaginationRowModel: getPaginationRowModel(),
+    manualPagination: true,
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function"
+          ? updater({ pageIndex: page, pageSize })
+          : updater;
+
+      onPageChange(newPagination.pageIndex);
+      onPageSizeChange(newPagination.pageSize);
+    },
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -44,8 +66,14 @@ export function DataTable<TData, TValue>({
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: {
+        pageIndex: page,
+        pageSize,
+      },
     }
   })
+
+  console.log('Row model:', table.getRowModel().rows);
 
   return (
     <div>
@@ -137,7 +165,7 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.previousPage()}
+          onClick={() => onPageChange(page - 1)}
           disabled={!table.getCanPreviousPage()}
         >
           Previous
@@ -145,7 +173,7 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => table.nextPage()}
+          onClick={() => onPageChange(page + 1)}
           disabled={!table.getCanNextPage()}
         >
           Next

@@ -5,9 +5,11 @@
 ## [1.0.1] - 2024-11-18
 - Readme update
 - Add future improvements
-## [1.0.1] - 2024-11-19
+## [1.0.2] - 2024-11-19
 - Readme update
 - Add future improvements
+- ## [1.0.3] - 2024-11-19
+- Add support for backend side pagination
 
 ## Preparing for the job
 

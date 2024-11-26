@@ -136,14 +136,14 @@ const mockedCountryArray = [
   },
 ];
 
-const MockCountries = {
+const MockCountriesAll = {
   promise: Promise.resolve({
     data: mockedCountryArray
   }),
 };
 
-const getCountriesMock = () => {
-  return MockCountries.promise;
+const getCountriesAllMock = () => {
+  return MockCountriesAll.promise;
 };
 
 const getCountryMock = (countryId: string) => {
@@ -171,7 +171,7 @@ function deleteCountryMock(id: string) {
 }
 
 const mockedApi = {
-  getCountriesMock,
+  getCountriesAllMock,
   getCountryMock,
   deleteCountryMock,
 };

@@ -9,6 +9,9 @@ import com.filip.dockercompose_showcase.repository.RegionRepository;
 import com.filip.dockercompose_showcase.service.CountryService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,6 +38,13 @@ public class CountryServiceImpl implements CountryService {
                 .stream()
                 .map(CountryMapper::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<CountryDTO> findAllPaginated(int page, int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        return countryRepository.findAll(pageable)
+                .map(CountryMapper::toDTO);
     }
 
     @Override

@@ -1,9 +1,9 @@
 package com.filip.dockercompose_showcase.controller;
 
 import com.filip.dockercompose_showcase.dto.CountryDTO;
-import com.filip.dockercompose_showcase.entity.CountryEntity;
 import com.filip.dockercompose_showcase.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +17,14 @@ public class CountryController {
     @Autowired
     private CountryService countryService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<CountryDTO> getAllCountries() {
         return countryService.findAll();
+    }
+
+    @GetMapping
+    public Page<CountryDTO> getAllCountriesPaginated(@RequestParam int page, @RequestParam int pageSize) {
+        return countryService.findAllPaginated(page, pageSize);
     }
 
     @GetMapping("/{id}")
