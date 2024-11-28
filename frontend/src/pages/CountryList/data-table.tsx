@@ -3,7 +3,7 @@
 import {
   ColumnDef, ColumnFiltersState,
   flexRender,
-  getCoreRowModel, getFilteredRowModel,
+  getCoreRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable, VisibilityState,
@@ -23,6 +23,8 @@ interface DataTableProps<TData, TValue> {
   pageSize: number;
   onPageChange: (page: number) => void;
   onPageSizeChange: (pageSize: number) => void;
+  globalFilter: string;
+  onFilterChange: (globalFilter: string) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -33,6 +35,8 @@ export function DataTable<TData, TValue>({
   pageSize,
   onPageChange,
   onPageSizeChange,
+  globalFilter,
+  onFilterChange,
   }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -58,7 +62,9 @@ export function DataTable<TData, TValue>({
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
+    //getFilteredRowModel: getFilteredRowModel(),
+    manualFiltering: true,
+    onGlobalFilterChange: onFilterChange,
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
@@ -70,6 +76,7 @@ export function DataTable<TData, TValue>({
         pageIndex: page,
         pageSize,
       },
+      globalFilter,
     }
   })
 
@@ -78,12 +85,11 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       <div className="flex items-center py-4">
-        <Input placeholder="Filter by name..."
-               value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-               onChange={(event) =>
-                table.getColumn("name")?.setFilterValue(event.target.value)
-               }
-               className="max-w-md"
+        <Input
+          placeholder="Search..."
+          value={globalFilter}
+          onChange={(e) => table.setGlobalFilter(e.target.value)} // Set global filter on input change
+          className="max-w-md"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

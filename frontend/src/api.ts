@@ -19,6 +19,12 @@ export const getPaginatedCountries = (page: number, pageSize: number) =>
     : api.get<PageResponse<Country>>('/countries', {
     params: { page, pageSize },
 }).then((res) => res);
+export const getPaginatedFilteredCountries = (page: number, pageSize: number, globalFilter: string) =>
+  isDevelopment
+    ? mockedApi.getCountriesAllMock()
+    : api.get<PageResponse<Country>>('/countries/filtered', {
+        params: { page, pageSize, globalFilter },
+    }).then((res) => res);
 export const getCountryById = (id: string) => isDevelopment ? mockedApi.getCountryMock(id) : api.get<Country>(`/countries/${id}`);
 export const createCountry = (country: CountryFormData) => api.post('/countries', country);
 export const updateCountry = (id: string, country: CountryFormData) => api.put(`/countries/${id}`, country);

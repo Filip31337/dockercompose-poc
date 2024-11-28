@@ -27,6 +27,15 @@ public class CountryController {
         return countryService.findAllPaginated(page, pageSize);
     }
 
+    @GetMapping("/filtered")
+    public Page<CountryDTO> getAllCountriesPaginated(
+            @RequestParam int page,
+            @RequestParam int pageSize,
+            @RequestParam String globalFilter
+    ) {
+        return countryService.findAllPaginated(page, pageSize, globalFilter);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CountryDTO> getCountryById(@PathVariable String id) {
         Optional<CountryDTO> country = countryService.findById(id);

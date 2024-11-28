@@ -133,5 +133,5 @@ curl --insecure --location --request GET https://localhost:8443/api/regions
 
 #### Access database directly:
 - Open oracle-db container shell to run sqlplus CLI
-- Run `TEST/test@//localhost/FREEPDB1`
+- Run `sqlplus TEST/test@//localhost/FREEPDB1`
 - Run `select * from regions;`

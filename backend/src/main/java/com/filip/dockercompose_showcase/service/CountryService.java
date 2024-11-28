@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface CountryService {
     List<CountryDTO> findAll();
     Page<CountryDTO> findAllPaginated(int page, int pageSize);
+    Page<CountryDTO> findAllPaginated(int page, int pageSize, String globalFilter);
     Optional<CountryDTO> findById(String countryId);
     CountryDTO save(CountryDTO countryDTO);
     CountryDTO update(String countryId, CountryDTO countryDTO);

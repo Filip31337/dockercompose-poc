@@ -48,6 +48,19 @@ public class CountryServiceImpl implements CountryService {
     }
 
     @Override
+    public Page<CountryDTO> findAllPaginated(int page, int pageSize, String globalFilter) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        if (globalFilter == null || globalFilter.isBlank()) {
+            return countryRepository.findAll(pageable)
+                    .map(CountryMapper::toDTO);
+        }
+
+        return countryRepository.findByGlobalFilter(globalFilter, pageable)
+                .map(CountryMapper::toDTO);
+    }
+
+    @Override
     public Optional<CountryDTO> findById(String countryId) {
         return countryRepository.findById(countryId)
                 .map(CountryMapper::toDTO);

@@ -1,5 +1,5 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Country, deleteCountry, getPaginatedCountries, PageResponse } from '../../api'
+import { Country, deleteCountry, getPaginatedFilteredCountries, PageResponse } from '../../api'
 import { Alert } from "@/components/ui/alert";
 import { Spinner } from '@/components/ui/spinner';
 import { DataTable } from '@/pages/CountryList/data-table'
@@ -11,10 +11,11 @@ const CountryList = () => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
+  const [globalFilter, setGlobalFilter] = useState('');
   const navigate = useNavigate();
-  const { data: countryData, error, isLoading } = useQuery<unknown, Error, PageResponse<Country>, ['countries', unknown, unknown]>({
-    queryKey: ['countries', page, pageSize],
-    queryFn: () => getPaginatedCountries(page, pageSize).then(res => res.data),
+  const { data: countryData, error, isLoading } = useQuery<unknown, Error, PageResponse<Country>, ['countries', unknown, unknown, unknown]>({
+    queryKey: ['countries', page, pageSize, globalFilter],
+    queryFn: () => getPaginatedFilteredCountries(page, pageSize, globalFilter).then(res => res.data),
     placeholderData: keepPreviousData,
   });
 
@@ -27,6 +28,10 @@ const CountryList = () => {
 
   const handlePageChange = (newPage: number) => setPage(newPage);
   const handlePageSizeChange = (newPageSize: number) => setPageSize(newPageSize);
+  const handleFilterChange = (filterValue: string) => {
+    setGlobalFilter(filterValue);
+    setPage(0);
+  };
 
   if (isLoading) return <Spinner size="large" />;
   if (error) return <Alert variant="default">{error.message}</Alert>;
@@ -49,6 +54,8 @@ const CountryList = () => {
         pageSize={pageSize}
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
+        globalFilter={globalFilter}
+        onFilterChange={handleFilterChange}
       />
     </div>
   );
