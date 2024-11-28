@@ -30,4 +30,25 @@ public interface CountryRepository extends JpaRepository<CountryEntity, String> 
             nativeQuery = true)
     Page<CountryEntity> findByGlobalFilter(@Param("globalFilter") String globalFilter, Pageable pageable);
 
+    @Query(value = """
+    SELECT * FROM countries c
+    WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+       OR LOWER(c.official_name) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+       OR LOWER(c.country_code) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+       OR LOWER(c.timezone) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+       OR TO_CHAR(c.population) LIKE CONCAT('%', :globalFilter, '%')
+       OR TO_CHAR(c.area_sq_km) LIKE CONCAT('%', :globalFilter, '%')
+    """,
+            countQuery = """
+       SELECT COUNT(*) FROM countries c
+       WHERE LOWER(c.name) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+          OR LOWER(c.official_name) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+          OR LOWER(c.country_code) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+          OR LOWER(c.timezone) LIKE LOWER(CONCAT('%', :globalFilter, '%'))
+          OR TO_CHAR(c.population) LIKE CONCAT('%', :globalFilter, '%')
+          OR TO_CHAR(c.area_sq_km) LIKE CONCAT('%', :globalFilter, '%')
+    """,
+            nativeQuery = true)
+    Page<CountryEntity> findByGlobalFilterSorted(@Param("globalFilter") String globalFilter, Pageable pageable);
+
 }

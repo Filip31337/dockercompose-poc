@@ -2,11 +2,11 @@ package com.filip.dockercompose_showcase.dto;
 
 public class CountryDTO {
     private String countryId;
-    private String countryCode;
+    private String country_code;
     private String name;
-    private String officialName;
+    private String official_name;
     private Long population;
-    private Double areaSqKm;
+    private Double area_sq_km;
     private Double latitude;
     private Double longitude;
     private String timezone;
@@ -20,12 +20,12 @@ public class CountryDTO {
         this.countryId = countryId;
     }
 
-    public String getCountryCode() {
-        return countryCode;
+    public String getCountry_code() {
+        return country_code;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
+    public void setCountry_code(String country_code) {
+        this.country_code = country_code;
     }
 
     public String getName() {
@@ -36,12 +36,12 @@ public class CountryDTO {
         this.name = name;
     }
 
-    public String getOfficialName() {
-        return officialName;
+    public String getOfficial_name() {
+        return official_name;
     }
 
-    public void setOfficialName(String officialName) {
-        this.officialName = officialName;
+    public void setOfficial_name(String official_name) {
+        this.official_name = official_name;
     }
 
     public Long getPopulation() {
@@ -52,12 +52,12 @@ public class CountryDTO {
         this.population = population;
     }
 
-    public Double getAreaSqKm() {
-        return areaSqKm;
+    public Double getArea_sq_km() {
+        return area_sq_km;
     }
 
-    public void setAreaSqKm(Double areaSqKm) {
-        this.areaSqKm = areaSqKm;
+    public void setArea_sq_km(Double area_sq_km) {
+        this.area_sq_km = area_sq_km;
     }
 
     public Double getLatitude() {
@@ -96,11 +96,11 @@ public class CountryDTO {
     public String toString() {
         return "CountryDTO{" +
                 "countryId='" + countryId + '\'' +
-                ", countryCode='" + countryCode + '\'' +
+                ", countryCode='" + country_code + '\'' +
                 ", name='" + name + '\'' +
-                ", officialName='" + officialName + '\'' +
+                ", officialName='" + official_name + '\'' +
                 ", population=" + population +
-                ", areaSqKm=" + areaSqKm +
+                ", areaSqKm=" + area_sq_km +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", timezone='" + timezone + '\'' +

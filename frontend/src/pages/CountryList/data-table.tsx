@@ -4,7 +4,6 @@ import {
   ColumnDef, ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  getSortedRowModel,
   SortingState,
   useReactTable, VisibilityState,
 } from '@tanstack/react-table'
@@ -25,6 +24,8 @@ interface DataTableProps<TData, TValue> {
   onPageSizeChange: (pageSize: number) => void;
   globalFilter: string;
   onFilterChange: (globalFilter: string) => void;
+  sort: SortingState;
+  onSortChange: (sort: SortingState) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -37,8 +38,10 @@ export function DataTable<TData, TValue>({
   onPageSizeChange,
   globalFilter,
   onFilterChange,
+  sort,
+  onSortChange,
   }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  //const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
@@ -59,8 +62,13 @@ export function DataTable<TData, TValue>({
       onPageChange(newPagination.pageIndex);
       onPageSizeChange(newPagination.pageSize);
     },
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: (updater) => {
+      const newSorting =
+        typeof updater === 'function' ? updater(sort) : updater;
+      onSortChange(newSorting);
+    },
+    //getSortedRowModel: getSortedRowModel(),
+    manualSorting: true,
     onColumnFiltersChange: setColumnFilters,
     //getFilteredRowModel: getFilteredRowModel(),
     manualFiltering: true,
@@ -68,7 +76,6 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onRowSelectionChange: setRowSelection,
     state: {
-      sorting,
       columnFilters,
       columnVisibility,
       rowSelection,
@@ -77,6 +84,7 @@ export function DataTable<TData, TValue>({
         pageSize,
       },
       globalFilter,
+      sorting: sort,
     }
   })
 
@@ -88,7 +96,7 @@ export function DataTable<TData, TValue>({
         <Input
           placeholder="Search..."
           value={globalFilter}
-          onChange={(e) => table.setGlobalFilter(e.target.value)} // Set global filter on input change
+          onChange={(e) => table.setGlobalFilter(e.target.value)}
           className="max-w-md"
         />
         <DropdownMenu>

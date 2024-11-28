@@ -8,16 +8,20 @@ import com.filip.dockercompose_showcase.repository.CountryRepository;
 import com.filip.dockercompose_showcase.repository.RegionRepository;
 import com.filip.dockercompose_showcase.service.CountryService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class CountryServiceImpl implements CountryService {
 
@@ -58,6 +62,36 @@ public class CountryServiceImpl implements CountryService {
 
         return countryRepository.findByGlobalFilter(globalFilter, pageable)
                 .map(CountryMapper::toDTO);
+    }
+
+
+    @Override
+    public Page<CountryDTO> findAllPaginatedSorted(int page, int pageSize, String globalFilter, String sort) {
+        log.debug("FILIP DEBUG: findAllPaginatedSorted, page: " + page + " pageSize: " + pageSize + " filter: " + globalFilter + " sort: " + sort);
+
+        Pageable pageable = buildPageRequest(page, pageSize, sort);
+
+        return countryRepository.findByGlobalFilterSorted(globalFilter, pageable)
+                .map(CountryMapper::toDTO);
+    }
+
+    private Pageable buildPageRequest(int page, int pageSize, String sort) {
+        Sort sortObj = Sort.unsorted();
+
+        if (sort != null && !sort.isBlank()) {
+            sortObj = Sort.by(Arrays.stream(sort.split("\\|"))
+                    .map(s -> {
+                        String[] parts = s.split(",");
+                        String field = parts[0];
+                        Sort.Direction direction = parts.length > 1 && parts[1].equalsIgnoreCase("desc")
+                                ? Sort.Direction.DESC
+                                : Sort.Direction.ASC;
+                        return new Sort.Order(direction, field);
+                    })
+                    .toList());
+        }
+
+        return PageRequest.of(page, pageSize, sortObj);
     }
 
     @Override

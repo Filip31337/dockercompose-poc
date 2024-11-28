@@ -22,18 +22,28 @@ public class CountryController {
         return countryService.findAll();
     }
 
-    @GetMapping
+    @GetMapping("/paginated")
     public Page<CountryDTO> getAllCountriesPaginated(@RequestParam int page, @RequestParam int pageSize) {
         return countryService.findAllPaginated(page, pageSize);
     }
 
-    @GetMapping("/filtered")
+    @GetMapping("/paginated/filtered")
     public Page<CountryDTO> getAllCountriesPaginated(
             @RequestParam int page,
             @RequestParam int pageSize,
             @RequestParam String globalFilter
     ) {
         return countryService.findAllPaginated(page, pageSize, globalFilter);
+    }
+
+    @GetMapping("/paginated/filtered/sorted")
+    public Page<CountryDTO> getAllCountriesPaginatedSorted(
+            @RequestParam int page,
+            @RequestParam int pageSize,
+            @RequestParam String globalFilter,
+            @RequestParam String sort
+    ) {
+        return countryService.findAllPaginatedSorted(page, pageSize, globalFilter, sort);
     }
 
     @GetMapping("/{id}")

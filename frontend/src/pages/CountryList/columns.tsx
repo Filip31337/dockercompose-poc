@@ -36,7 +36,7 @@ export const columns = (navigate: ReturnType<typeof useNavigate>, onDelete: (id:
     enableHiding: false,
   },
   {
-    accessorKey: "countryCode",
+    accessorKey: "country_code",
     header: ({column}) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -58,7 +58,7 @@ export const columns = (navigate: ReturnType<typeof useNavigate>, onDelete: (id:
     }
   },
   {
-    accessorKey: "officialName",
+    accessorKey: "official_name",
     header: ({column}) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -82,7 +82,7 @@ export const columns = (navigate: ReturnType<typeof useNavigate>, onDelete: (id:
     }
   },
   {
-    accessorKey: "areaSqKm",
+    accessorKey: "area_sq_km",
     header: "Size",
     cell: ({row}) => {
       const amount = parseInt(row.getValue("areaSqKm"))

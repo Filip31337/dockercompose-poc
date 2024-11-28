@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { CityFormData, CountryFormData, CurrencyFormData, RegionFormData } from './types/schemas';
 import mockedApi from '@/mockApi';
+import { SortingState } from '@tanstack/react-table'
 
 const isDevelopment = import.meta.env.MODE === 'development';
 console.log("Is development: " + isDevelopment);
@@ -16,15 +17,28 @@ export const getCountriesAll = () => isDevelopment ? mockedApi.getCountriesAllMo
 export const getPaginatedCountries = (page: number, pageSize: number) =>
   isDevelopment
     ? mockedApi.getCountriesAllMock()
-    : api.get<PageResponse<Country>>('/countries', {
+    : api.get<PageResponse<Country>>('/countries/paginated', {
     params: { page, pageSize },
 }).then((res) => res);
 export const getPaginatedFilteredCountries = (page: number, pageSize: number, globalFilter: string) =>
   isDevelopment
     ? mockedApi.getCountriesAllMock()
-    : api.get<PageResponse<Country>>('/countries/filtered', {
+    : api.get<PageResponse<Country>>('/countries/paginated/filtered/', {
         params: { page, pageSize, globalFilter },
     }).then((res) => res);
+export const getPaginatedFilteredSortedCountries = (
+  page: number,
+  pageSize: number,
+  globalFilter: string,
+  sort: SortingState
+) => {
+    const sortQuery = sort
+      .map((s) => `${s.id},${s.desc ? 'desc' : 'asc'}`)
+      .join('|');
+    return api.get<PageResponse<Country>>('/countries/paginated/filtered/sorted', {
+        params: { page, pageSize, globalFilter, sort: sortQuery },
+    });
+};
 export const getCountryById = (id: string) => isDevelopment ? mockedApi.getCountryMock(id) : api.get<Country>(`/countries/${id}`);
 export const createCountry = (country: CountryFormData) => api.post('/countries', country);
 export const updateCountry = (id: string, country: CountryFormData) => api.put(`/countries/${id}`, country);

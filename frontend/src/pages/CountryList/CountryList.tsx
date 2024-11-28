@@ -1,21 +1,28 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Country, deleteCountry, getPaginatedFilteredCountries, PageResponse } from '../../api'
+import {
+  Country,
+  deleteCountry,
+  getPaginatedFilteredSortedCountries,
+  PageResponse,
+} from '../../api'
 import { Alert } from "@/components/ui/alert";
 import { Spinner } from '@/components/ui/spinner';
 import { DataTable } from '@/pages/CountryList/data-table'
 import { columns } from '@/pages/CountryList/columns'
 import { useNavigate } from "react-router-dom"
 import { useState } from 'react'
+import { SortingState } from '@tanstack/react-table'
 
 const CountryList = () => {
   const queryClient = useQueryClient();
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(10);
   const [globalFilter, setGlobalFilter] = useState('');
+  const [sort, setSort] = useState<SortingState>([]);
   const navigate = useNavigate();
-  const { data: countryData, error, isLoading } = useQuery<unknown, Error, PageResponse<Country>, ['countries', unknown, unknown, unknown]>({
-    queryKey: ['countries', page, pageSize, globalFilter],
-    queryFn: () => getPaginatedFilteredCountries(page, pageSize, globalFilter).then(res => res.data),
+  const { data: countryData, error, isLoading } = useQuery<unknown, Error, PageResponse<Country>, ['countries', unknown, unknown, unknown, unknown]>({
+    queryKey: ['countries', page, pageSize, globalFilter, sort],
+    queryFn: () => getPaginatedFilteredSortedCountries(page, pageSize, globalFilter, sort).then(res => res.data),
     placeholderData: keepPreviousData,
   });
 
@@ -30,6 +37,10 @@ const CountryList = () => {
   const handlePageSizeChange = (newPageSize: number) => setPageSize(newPageSize);
   const handleFilterChange = (filterValue: string) => {
     setGlobalFilter(filterValue);
+    setPage(0);
+  };
+  const handleSortChange = (sort: SortingState) => {
+    setSort(sort);
     setPage(0);
   };
 
@@ -56,6 +67,8 @@ const CountryList = () => {
         onPageSizeChange={handlePageSizeChange}
         globalFilter={globalFilter}
         onFilterChange={handleFilterChange}
+        sort={sort}
+        onSortChange={handleSortChange}
       />
     </div>
   );

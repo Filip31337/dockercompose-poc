@@ -10,6 +10,7 @@ public interface CountryService {
     List<CountryDTO> findAll();
     Page<CountryDTO> findAllPaginated(int page, int pageSize);
     Page<CountryDTO> findAllPaginated(int page, int pageSize, String globalFilter);
+    Page<CountryDTO> findAllPaginatedSorted(int page, int pageSize, String globalFilter, String sort);
     Optional<CountryDTO> findById(String countryId);
     CountryDTO save(CountryDTO countryDTO);
     CountryDTO update(String countryId, CountryDTO countryDTO);
