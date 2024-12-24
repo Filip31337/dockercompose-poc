@@ -20,12 +20,14 @@ export const getPaginatedCountries = (page: number, pageSize: number) =>
     : api.get<PageResponse<Country>>('/countries/paginated', {
     params: { page, pageSize },
 }).then((res) => res);
+
 export const getPaginatedFilteredCountries = (page: number, pageSize: number, globalFilter: string) =>
   isDevelopment
     ? mockedApi.getCountriesAllMock()
     : api.get<PageResponse<Country>>('/countries/paginated/filtered/', {
         params: { page, pageSize, globalFilter },
     }).then((res) => res);
+
 export const getPaginatedFilteredSortedCountries = (
   page: number,
   pageSize: number,
@@ -35,9 +37,11 @@ export const getPaginatedFilteredSortedCountries = (
     const sortQuery = sort
       .map((s) => `${s.id},${s.desc ? 'desc' : 'asc'}`)
       .join('|');
-    return api.get<PageResponse<Country>>('/countries/paginated/filtered/sorted', {
-        params: { page, pageSize, globalFilter, sort: sortQuery },
-    });
+    return isDevelopment
+      ? mockedApi.getCountriesSortedMock(page, pageSize, globalFilter, sortQuery)
+      : api.get<PageResponse<Country>>('/countries/paginated/filtered/sorted', {
+          params: { page, pageSize, globalFilter, sort: sortQuery },
+      });
 };
 export const getCountryById = (id: string) => isDevelopment ? mockedApi.getCountryMock(id) : api.get<Country>(`/countries/${id}`);
 export const createCountry = (country: CountryFormData) => api.post('/countries', country);

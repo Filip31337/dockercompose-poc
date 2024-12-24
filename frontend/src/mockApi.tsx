@@ -136,6 +136,11 @@ const mockedCountryArray = [
   },
 ];
 
+const mockedPaginatedFilteredSortedResponse = {
+  content: mockedCountryArray as [],
+  total: 11
+}
+
 const MockCountriesAll = {
   promise: Promise.resolve({
     data: mockedCountryArray
@@ -170,10 +175,23 @@ function deleteCountryMock(id: string) {
   return mockDeletedCountry.promise;
 }
 
+const getCountriesSortedMock = (
+  page: number,
+  pageSize: number,
+  globalFilter: string,
+  sortQuery: string
+) => {
+  console.log("getCountriesSortedMock mock: " + page, pageSize, globalFilter, sortQuery)
+  return Promise.resolve({
+    data: mockedPaginatedFilteredSortedResponse,
+  });
+};
+
 const mockedApi = {
   getCountriesAllMock,
   getCountryMock,
   deleteCountryMock,
+  getCountriesSortedMock
 };
 
 export default mockedApi;

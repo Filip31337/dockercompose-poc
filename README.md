@@ -135,3 +135,26 @@ curl --insecure --location --request GET https://localhost:8443/api/regions
 - Open oracle-db container shell to run sqlplus CLI
 - Run `sqlplus TEST/test@//localhost/FREEPDB1`
 - Run `select * from regions;`
+
+### 8. Testing
+
+Run test on dev profile:
+- open terminal
+- position to frontend folder
+```bash
+cd /frontend
+```
+- run app in dev profile
+```bash
+npm run dev
+```
+- open terminal 2
+- position to frontend folder
+```bash
+cd /frontend
+```
+- run playwright test ui 
+```bash
+npx playwright test --ui
+```
+- explore the test reports
